@@ -47,10 +47,10 @@ def main():
     saveFile.close()
 
     # Check file
-    newFile = open(TempFile, 'r')
-    newText = newFile.readlines()
-    print("Checking new file:  ")
-    print(newText)
+    #newFile = open(TempFile, 'r')
+    #newText = newFile.readlines()
+    #print("Checking new file:  ")
+    #print(newText)
 
     # Build the email.
     myMessage = GMAIL.create_message_with_attachment(SENDERADDRESS, recipient, subject,
@@ -63,7 +63,7 @@ def main():
     # Delete temp file.
     os.remove(TempFile)
 
-    print(result)
+    print("Done")
 
 
     return
