@@ -45,11 +45,11 @@ def setParameters(ConfigDictionary):
 
     for key in ConfigDictionary:
         if (key == 'GNUPGHome'):
-            GNUPGHOME = ''
+            GNUPGHOME = ConfigDictionary['GNUPGHome']
         elif (key == 'Sender'):
-            SENDERADDRESS = ''
+            SENDERADDRESS = ConfigDictionary['Sender']
         elif (key == 'SignFingerprint'):
-            SIGNFINGERPRINT = ''
+            SIGNFINGERPRINT = ConfigDictionary['SignFingerprint']
 
     return
 
@@ -87,6 +87,21 @@ def main():
     saveFile = open(TempFile, 'w')
     saveFile.write(str(encrypted_data))
     saveFile.close()
+
+    # Print all
+    ipa = True
+    if (ipa):
+        print('Variables')
+        print('GNUPGHOME      :  ' + GNUPGHOME)
+        print('SENDERADDRESS  :  ' + SENDERADDRESS)
+        print('SIGNFINGERPRINT:  ' + SIGNFINGERPRINT)
+        print('recipient      :  ' + recipient)
+        print('subject        :  ' + subject)
+        print('TempFile       :  ' + TempFile)
+
+
+
+
 
     # Build the email.
     myMessage = GMAIL.create_message_with_attachment(SENDERADDRESS, recipient, subject,

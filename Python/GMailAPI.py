@@ -13,6 +13,7 @@ from email.mime.text import MIMEText
 from googleapiclient.discovery import build
 from httplib2 import Http
 from oauth2client import file, client, tools
+from urllib2 import HTTPError
 
 
 # If modifying these scopes, delete the file token.json.
@@ -130,8 +131,10 @@ class GMailAPI():
                    .execute())
         print ('Message Id: %s' % message['id'])
         return message
-      except errors.HttpError as error:
+
+      except errors.HttpError, error:
         print ('An error occurred: %s' % error)
+        exit(300)
 
 
     def authenticate(self):
