@@ -8,9 +8,9 @@ import os
 
 #https://pythonhosted.org/python-gnupg/
 
-SENDERADDRESS = "str.somecoolname@gmail.com"
+SENDERADDRESS = '/Temp/OurEmailAddress.txt'
 SIGNFINGERPRINT = '609703532579DBB2C2C2B769044643E3725386DA'
-GNUPGHOME = '/home/jesse/.gnupg'
+GNUPGHOME = '/Temp/.gnupg'
 GMAIL = GMailAPI.GMailAPI(SENDERADDRESS, '/Temp/GMail.API.token.json', '/Temp/GMAIL.API.credentials.json')
 
 
@@ -32,12 +32,11 @@ def main():
 
     print("Sending email.")
 
-    subject = 'Registration Submission'
+    subject = 'Hash Submission'
     recipient = 'sub-2018@contest.korelogic.com'
-    #recipient = 'jmcwilli76@gmail.com'
-    SignerPassPhrase = 'DoNotCrackMe!'
-    TargetFile = '/home/jesse/Git/PasswordCracking/2018-CrackMeIfYouCan/teamclass.txt'
-    TempFile = '/home/jesse/Git/PasswordCracking/2018-CrackMeIfYouCan/keySubmission.pgp'
+    SignerPassPhrase = '/Temp/SingerPassPhrase.cred'
+    TargetFile = '/Temp/HashesToSubmit.txt'
+    TempFile = '/Temp/HashSubmission.pgp'
 
     # Encrypt the file.
     encrypted_data = encryptData(TargetFile, recipient, True, SignerPassPhrase)
