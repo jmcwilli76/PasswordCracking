@@ -4,15 +4,9 @@ import gnupg
 import GMailAPI
 import os
 
-
-
-#https://pythonhosted.org/python-gnupg/
-
-SENDERADDRESS = '/Temp/OurEmailAddress.txt'
-SIGNFINGERPRINT = '609703532579DBB2C2C2B769044643E3725386DA'
-GNUPGHOME = '/Temp/.gnupg'
-GMAIL = GMailAPI.GMailAPI(SENDERADDRESS, '/Temp/GMail.API.token.json', '/Temp/GMAIL.API.credentials.json')
-
+GNUPGHOME = ''
+SENDERADDRESS = ''
+SIGNFINGERPRINT = ''
 
 def encryptData(TargetFile, Recipient, SignAlso = True, SignerPassPhrase = ''):
     gpg = gnupg.GPG(gnupghome=GNUPGHOME)
@@ -28,29 +22,71 @@ def encryptData(TargetFile, Recipient, SignAlso = True, SignerPassPhrase = ''):
 
     return stream
 
+def readConfigFile(ConfigurationFile):
+    retDic = {}
+    try:
+        print('Reading configuration file.')
+        print('File:  ' + ConfigurationFile)
+        with open(ConfigurationFile, 'r') as CF:
+            for line in CF.readlines():
+                line = line.strip('\n')
+                key, value = line.split(':')
+                retDic[key] = value
+
+    except:
+        print('Failed to read the configuration file.')
+        print('File:  ' + ConfigurationFile)
+        exit(100)
+
+    return retDic
+
+def setParameters(ConfigDictionary):
+    global GNUPGHOME, SENDERADDRESS, SIGNFINGERPRINT
+
+    for key in ConfigDictionary:
+        if (key == 'GNUPGHome'):
+            GNUPGHOME = ''
+        elif (key == 'Sender'):
+            SENDERADDRESS = ''
+        elif (key == 'SignFingerprint'):
+            SIGNFINGERPRINT = ''
+
+    return
+
+def getSingerPhrase(File):
+    retString = ''
+    try:
+        with open(File, 'r') as f:
+            retString = f.readline()
+    except:
+        print('Failed to read the signing phrase!')
+        exit(200)
+
+    return retString
+
 def main():
+    # This is the file that holds the configuration settings.
+    dicConfig = readConfigFile('/Temp/EmailConfig.config')
 
-    print("Sending email.")
+    # Set global variables with the dictionary returned.
+    setParameters(dicConfig)
 
-    subject = 'Hash Submission'
-    recipient = 'sub-2018@contest.korelogic.com'
-    SignerPassPhrase = '/Temp/SingerPassPhrase.cred'
-    TargetFile = '/Temp/HashesToSubmit.txt'
-    TempFile = '/Temp/HashSubmission.pgp'
+    # Build the GMail object
+    GMAIL = GMailAPI.GMailAPI(SENDERADDRESS, dicConfig['APIToken'], dicConfig['APICred'])
+
+    subject = dicConfig['Subject']
+    recipient = dicConfig['To']
+    TargetFile = dicConfig['TargetFile']
+    TempFile = dicConfig['TempFile']
+    SignerPassPhrase = dicConfig['SignerPhraseFile']
 
     # Encrypt the file.
-    encrypted_data = encryptData(TargetFile, recipient, True, SignerPassPhrase)
+    encrypted_data = encryptData(TargetFile, recipient, True, getSingerPhrase(SignerPassPhrase))
 
     # Save the encrypted file.
     saveFile = open(TempFile, 'w')
     saveFile.write(str(encrypted_data))
     saveFile.close()
-
-    # Check file
-    #newFile = open(TempFile, 'r')
-    #newText = newFile.readlines()
-    #print("Checking new file:  ")
-    #print(newText)
 
     # Build the email.
     myMessage = GMAIL.create_message_with_attachment(SENDERADDRESS, recipient, subject,
@@ -58,15 +94,11 @@ def main():
 
     # Send the email.
     result = GMAIL.send_message(SENDERADDRESS, myMessage)
-    #result = ""
 
     # Delete temp file.
     os.remove(TempFile)
 
     print("Done")
-
-
-    return
 
 if __name__ == "__main__":
     main()

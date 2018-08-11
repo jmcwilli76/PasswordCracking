@@ -130,7 +130,7 @@ class GMailAPI():
                    .execute())
         print ('Message Id: %s' % message['id'])
         return message
-      except errors.HttpError, error:
+      except errors.HttpError as error:
         print ('An error occurred: %s' % error)
 
 
