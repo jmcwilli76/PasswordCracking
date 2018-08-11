@@ -89,7 +89,20 @@ def main():
     saveFile.close()
 
     # Print all
-    ipa = True
+    ipa = False
+    if (GNUPGHOME == ''):
+        ipa = True
+    if (SENDERADDRESS == ''):
+        ipa = True
+    if (SIGNFINGERPRINT == ''):
+        ipa = True
+    if (recipient == ''):
+        ipa = True
+    if (subject == ''):
+        ipa = True
+    if (TempFile == ''):
+        ipa = True
+
     if (ipa):
         print('Variables')
         print('GNUPGHOME      :  ' + GNUPGHOME)
@@ -98,6 +111,8 @@ def main():
         print('recipient      :  ' + recipient)
         print('subject        :  ' + subject)
         print('TempFile       :  ' + TempFile)
+        print("A needed variable is blank!")
+        exit(400)
 
 
 
