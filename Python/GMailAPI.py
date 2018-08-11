@@ -25,7 +25,6 @@ SCOPES = 'https://www.googleapis.com/auth/gmail.send'
 
 class GMailAPI():
     def __init__(self, SenderAddress, TokenLocation, CredentialLocation):
-        global SENDERADDRESS, TOKEN, CRED
 
         if (TokenLocation == ""):
             self.TOKEN = '/Temp/GMail.API.token.json'
