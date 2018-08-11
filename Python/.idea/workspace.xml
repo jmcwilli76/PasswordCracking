@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="92b911b3-6eba-4af6-8f44-787de78dbef1" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GMailAPI.py" beforeDir="false" afterPath="$PROJECT_DIR$/GMailAPI.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GPGMail.py" beforeDir="false" afterPath="$PROJECT_DIR$/GPGMail.py" afterDir="false" />
-    </list>
+    <list default="true" id="92b911b3-6eba-4af6-8f44-787de78dbef1" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,12 +21,12 @@
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="Python Console" value="24" />
-          <entry key="py" value="4312" />
+          <entry key="py" value="4395" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Python" value="4336" />
+          <entry key="Python" value="4419" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -50,11 +46,11 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/GPGMail.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-396">
-              <caret line="47" column="51" selection-start-line="47" selection-start-column="51" selection-end-line="47" selection-end-column="51" />
+            <state relative-caret-position="195">
+              <caret line="113" column="42" selection-start-line="113" selection-start-column="42" selection-end-line="113" selection-end-column="42" />
               <folding>
                 <element signature="e#19#31#0" expanded="true" />
-                <marker date="1533965244303" expanded="true" signature="194:566" ph="..." />
+                <marker date="1533965499114" expanded="true" signature="194:566" ph="..." />
               </folding>
             </state>
           </provider>
@@ -269,11 +265,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/GPGMail.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-396">
-          <caret line="47" column="51" selection-start-line="47" selection-start-column="51" selection-end-line="47" selection-end-column="51" />
+        <state relative-caret-position="195">
+          <caret line="113" column="42" selection-start-line="113" selection-start-column="42" selection-end-line="113" selection-end-column="42" />
           <folding>
             <element signature="e#19#31#0" expanded="true" />
-            <marker date="1533965244303" expanded="true" signature="194:566" ph="..." />
+            <marker date="1533965499114" expanded="true" signature="194:566" ph="..." />
           </folding>
         </state>
       </provider>
