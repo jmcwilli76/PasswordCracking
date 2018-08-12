@@ -30,7 +30,7 @@ def readConfigFile(ConfigurationFile):
         with open(ConfigurationFile, 'r') as CF:
             for line in CF.readlines():
                 line = line.strip('\n')
-                key, value = line.split(':')
+                key, value = line.split('=')
                 retDic[key] = value
 
     except:
@@ -71,17 +71,21 @@ def main():
     # Set global variables with the dictionary returned.
     setParameters(dicConfig)
 
-    # Build the GMail object
-    GMAIL = GMailAPI.GMailAPI(SENDERADDRESS, dicConfig['APIToken'], dicConfig['APICred'])
-
+    # Assign variables from configuration dictionary.
     subject = dicConfig['Subject']
     recipient = dicConfig['To']
     TargetFile = dicConfig['TargetFile']
     TempFile = dicConfig['TempFile']
     SignerPassPhrase = dicConfig['SignerPhraseFile']
+    Scopes = dicConfig['Scopes']
+
+    # Build the GMail object
+    GMAIL = GMailAPI.GMailAPI(SENDERADDRESS, dicConfig['APIToken'], dicConfig['APICred'], Scopes)
 
     # Encrypt the file.
-    encrypted_data = encryptData(TargetFile, recipient, True, getSingerPhrase(SignerPassPhrase))
+    TARGET = TargetFile + "md5c_6.txt"
+    #TARGET = TargetFile + "wescracked04.txt"
+    encrypted_data = encryptData(TARGET, recipient, True, getSingerPhrase(SignerPassPhrase))
 
     # Save the encrypted file.
     saveFile = open(TempFile, 'w')
@@ -113,10 +117,6 @@ def main():
         print('TempFile       :  ' + TempFile)
         print("A needed variable is blank!")
         exit(400)
-
-
-
-
 
     # Build the email.
     myMessage = GMAIL.create_message_with_attachment(SENDERADDRESS, recipient, subject,

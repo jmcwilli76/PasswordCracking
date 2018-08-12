@@ -15,17 +15,8 @@ from httplib2 import Http
 from oauth2client import file, client, tools
 from urllib2 import HTTPError
 
-
-# If modifying these scopes, delete the file token.json.
-
-# Create, read, update, and delete drafts. Send messages and drafts.
-#SCOPES = 'https://www.googleapis.com/auth/gmail.compose'
-
-# Send messages only. No read or modify privileges on mailbox.
-SCOPES = 'https://www.googleapis.com/auth/gmail.send'
-
 class GMailAPI():
-    def __init__(self, SenderAddress, TokenLocation, CredentialLocation):
+    def __init__(self, SenderAddress, TokenLocation, CredentialLocation, Scopes):
 
         if (TokenLocation == ""):
             self.TOKEN = '/Temp/GMail.API.token.json'
@@ -39,6 +30,7 @@ class GMailAPI():
 
         self.SENDERADDRESS = SenderAddress
         self.SERVICE = ""
+        self.SCOPES = Scopes
 
 
     def create_message(self, sender, to, subject, message_text):
@@ -137,7 +129,81 @@ class GMailAPI():
         exit(300)
 
 
+    def get_message(self, user_id, MessageID):
+      """Send an email message.
+
+      Args:
+        service: Authorized Gmail API service instance.
+        user_id: User's email address. The special value "me"
+        can be used to indicate the authenticated user.
+        message: Message to be sent.
+
+      Returns:
+        Sent Message.
+      """
+      if (self.SERVICE == ""):
+          self.authenticate()
+
+      try:
+        message = (self.SERVICE.users().messages().get(userId=user_id, id=MessageID)
+                   .execute())
+
+        return message
+
+      except Exception as error:
+        print ('An error occurred: %s' % error)
+        exit(300)
+
+
+    def list_messages(self, user_id, From = '', Subject = '', AdditionalQuery = ''):
+      """list all email messages.
+
+      Args:
+        service: Authorized Gmail API service instance.
+        user_id: User's email address. The special value "me"
+        can be used to indicate the authenticated user.
+        message: Message to be sent.
+
+      Returns:
+        Sent Message.
+      """
+      if (self.SERVICE == ""):
+          self.authenticate()
+
+      # Check to see if From and Subject are specified.
+      if (From != '' and Subject != ''):
+          query = 'from:{0} subject:"{1}"'.format(From, Subject)
+      elif (From == '' and Subject != ''):
+          query = 'subject:{0}'.format(Subject)
+      elif (From != '' and Subject == ''):
+          query = 'from:{0}'.format(From)
+      else:
+          query = ""
+      if (AdditionalQuery != ''):
+          if (query == ''):
+              query = AdditionalQuery
+          else:
+              query += AdditionalQuery
+
+      try:
+        # Check if a query is specified.
+        if (query != ''):
+            print("Using query:  " + query)
+            results = (self.SERVICE.users().messages().list(userId=user_id, q=query).execute())
+        else:
+            results = (self.SERVICE.users().messages().list(userId=user_id).execute())
+
+        return results
+
+      except Exception as error:
+        print ('An error occurred: %s' % error)
+        exit(300)
+
+
     def authenticate(self):
+        print('Authenticating')
+        print('Token:  ({0} Exists({1}))'.format(self.TOKEN, str(os.path.exists(self.TOKEN))))
+        print('Cred :  ({0} Exists({1}))'.format(self.CRED, str(os.path.exists(self.CRED))))
         store = file.Storage(self.TOKEN)
         creds = store.get()
         if not creds or creds.invalid:
