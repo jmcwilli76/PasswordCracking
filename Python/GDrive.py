@@ -2,8 +2,9 @@
 from __future__ import print_function
 import httplib2
 import os
+import io
 import argparse
-from apiclient import discovery
+from apiclient import discovery, http
 from oauth2client import file, client, tools
 from oauth2client.file import Storage
 
@@ -24,6 +25,8 @@ parser.add_argument('--File', type=str,
                     help='The fully qualified path to the file to action')
 parser.add_argument('--Action', type=str,
                     help='The Action to take with the file.')
+parser.add_argument('--Folder', type=str,
+                    help='The folder to get a list of files from.')
 # Read in arguments
 ARGS = parser.parse_args()
 
@@ -56,8 +59,8 @@ def buildService():
 def readConfigFile(ConfigurationFile):
     retDic = {}
     try:
-        print('Reading configuration file.')
-        print('File:  ' + ConfigurationFile)
+        #print('Reading configuration file.')
+        #print('File:  ' + ConfigurationFile)
         with open(ConfigurationFile, 'r') as CF:
             for line in CF.readlines():
                 line = line.strip('\n')
@@ -176,8 +179,6 @@ def moveFile(service, SourceFolder, TargetFolder, FileName):
         print("Failed to find the file ID for {0}".format(FileName))
     else:
         try:
-            #result = service.files().update(fileId=fileID, addParents=addParID, removeParents=remParID).execute()
-
             # Retrieve the existing parents to remove
             result = service.files().get(fileId=fileID,
                                              fields='parents').execute()
@@ -231,7 +232,14 @@ def getFile(service, FileName):
     retObj = ''
     fileId = getFileID(service, FileName)
     try:
-        retObj = service.files().get(fileId=fileId).execute()
+        request = service.files().get_media(fileId=fileId)
+        fh = io.BytesIO()
+        downloader = http.MediaIoBaseDownload(fh, request)
+        done = False
+        while done is False:
+            status, done = downloader.next_chunk()
+            print("Download %d%%." % int(status.progress() * 100))
+        retObj = fh.getvalue()
 
     except Exception as error:
         print("An error has occured!")
@@ -251,6 +259,31 @@ def listItems(service):
                 print("{0}: {1}".format(key, str(item[key])))
 
     return
+
+
+def listFiles(service, Folder):
+    retFiles = []
+
+    # query = "trashed = False"
+    # query = "name = '" + Folder + "'"
+    query = "trashed = False and mimeType != 'application/vnd.google-apps.folder'"
+    query += " and parents in '" + getFolderID(service, Folder) + "'"
+    #print("Query:  " + query)
+    results = service.files().list(pageSize=10, q=query,
+                                   fields="nextPageToken, files(name)"
+                                   ).execute()
+    # Assign the dictionary entry of files to items.  Items is an array.
+    items = results['files']
+
+    # Check the array.
+    if not items:
+        print("No files found!")
+
+    # Make returned array
+    for item in items:
+        retFiles.append(item['name'])
+
+    return retFiles
 
 
 def getFileID(service, FileName):
@@ -325,18 +358,19 @@ def getFileDetails(service, FileName):
     retResult = ''
     fileID = getFileID(service, FileName)
     result = service.files().get(fileId=fileID, fields='id,mimeType,name,parents,trashed').execute()
-    print(result)
+    #print(result)
     return retResult
 
 def getFolderDetails(service, FolderName):
     retResult = ''
     fileID = getFolderID(service, FolderName)
     result = service.files().get(fileId=fileID, fields='id,mimeType,name,parents,trashed').execute()
-    print(result)
+    #print(result)
     return retResult
 
 
 def main():
+    retObj = None
     # This is the file that holds the configuration settings.
     dicConfig = readConfigFile('/Temp/GDrive.config')
 
@@ -346,6 +380,7 @@ def main():
     # Set local variables
     SourceFolder = dicConfig['SourceFolder']
     TargetFolder = dicConfig['TargetFolder']
+    TempPath = dicConfig['TempFolder']
     mimeType = dicConfig['mimeType']
 
     ## Get the credential and build the service.
@@ -354,21 +389,39 @@ def main():
     # Assign arguments
     Action = ARGS.Action
     File = ARGS.File
+    Folder = ARGS.Folder
 
     # Take action
     if (Action.lower() == "upload"):
         # Upload file
-        uploadFile(service, SourceFolder, File, mimeType)
+        retObj = uploadFile(service, SourceFolder, File, mimeType)
+
     elif (Action.lower() == "download" or Action.lower() == "get"):
         # Get file
-        file = getFile(service, os.path.split(File)[1])
-        print("File:  ")
-        print(file)
+        PathFile = os.path.join(Folder, File)
+        if (len(File.split('/')) > 1):
+            file = getFile(service, os.path.split(File)[1])
+        else:
+            file = getFile(service, File)
+        try:
+            f = open(PathFile, 'w')
+
+            f.writelines(file)
+            retObj = PathFile
+        except Exception as error:
+            print("An error has occured!")
+            print(error)
+
     elif (Action.lower() == "move"):
         # Move file
-        moveFile(service, SourceFolder, TargetFolder, os.path.split(File)[1])
+        retObj = moveFile(service, SourceFolder, TargetFolder, os.path.split(File)[1])
 
+    elif (Action.lower() == "list"):
+        # Move file
+        retObj = listFiles(service, Folder)
 
+    #print("Returning:  " + str(retObj))
+    return retObj
 
 if __name__ == '__main__':
     main()

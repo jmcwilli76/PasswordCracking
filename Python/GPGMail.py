@@ -3,6 +3,7 @@
 import gnupg
 import GMailAPI
 import os
+import GDrive
 
 GNUPGHOME = ''
 SENDERADDRESS = ''
@@ -64,17 +65,12 @@ def getSingerPhrase(File):
 
     return retString
 
-def main():
-    # This is the file that holds the configuration settings.
-    dicConfig = readConfigFile('/Temp/EmailConfig.config')
 
-    # Set global variables with the dictionary returned.
-    setParameters(dicConfig)
-
+def processFile(dicConfig, FileName):
     # Assign variables from configuration dictionary.
     subject = dicConfig['Subject']
     recipient = dicConfig['To']
-    TargetFile = dicConfig['TargetFile']
+    TempFolder = dicConfig['TempFolder']
     TempFile = dicConfig['TempFile']
     SignerPassPhrase = dicConfig['SignerPhraseFile']
     Scopes = dicConfig['Scopes']
@@ -82,9 +78,13 @@ def main():
     # Build the GMail object
     GMAIL = GMailAPI.GMailAPI(SENDERADDRESS, dicConfig['APIToken'], dicConfig['APICred'], Scopes)
 
+    # Build qualified file
+    if (len(FileName.split('/')) > 1):
+        TARGET = FileName
+    else:
+        TARGET = os.path.join(TempFolder, FileName)
+
     # Encrypt the file.
-    TARGET = TargetFile + "md5c_6.txt"
-    #TARGET = TargetFile + "wescracked04.txt"
     encrypted_data = encryptData(TARGET, recipient, True, getSingerPhrase(SignerPassPhrase))
 
     # Save the encrypted file.
@@ -129,6 +129,81 @@ def main():
     os.remove(TempFile)
 
     print("Done")
+
+    return True
+
+
+def main():
+    # This is the file that holds the configuration settings.
+    dicConfig = readConfigFile('/Temp/EmailConfig.config')
+
+    # Set global variables with the dictionary returned.
+    setParameters(dicConfig)
+
+    FileName = ''
+    TempFolder = dicConfig['TempFolder']
+    ConsolidationFile = dicConfig['ConsolidatedFile']
+    FileToUpload = dicConfig['FileToUpload']
+
+    # Get the files waiting to be processed
+    print("Get awaiting files.")
+    GDrive.ARGS.Action = 'List'
+    GDrive.ARGS.Folder = dicConfig['GDriveSource']
+    files = GDrive.main()
+    if (len(files) > 0):
+        for file in files:
+            # Loop through the files.
+            print("Downloading file:  " + file)
+            GDrive.ARGS.Action = 'Download'
+            GDrive.ARGS.File = file
+            GDrive.ARGS.Folder = TempFolder
+            result = GDrive.main()
+            print("Downloaded file to:  " + str(result))
+
+            #Move the downloaded file on the GDrive.
+            print("Moving file between GDrive folders.")
+            GDrive.ARGS.Action = 'Move'
+            GDrive.ARGS.File = file
+            result = GDrive.main()
+            print("Finished moving file.")
+
+    # Consolidate the files to one file.
+    print("Consolidating files.")
+    items = os.listdir(TempFolder)
+    Files = []
+    if (len(items) > 0):
+        for item in items:
+            target = os.path.join(TempFolder, item)
+            if (os.path.isfile(target)):
+                Files.append(target)
+
+    if (len(Files) > 0):
+        with open(ConsolidationFile, 'w+') as outfile:
+            for fname in Files:
+                with open(fname) as infile:
+                    for line in infile:
+                        outfile.write(line)
+                os.remove(fname)
+    print("Finished consolidating files to:  " + ConsolidationFile)
+
+    # Dedupelicate file.
+    print("De-Duplicating file.")
+    if (os.path.exists(ConsolidationFile)):
+        uniqlines = set(open(ConsolidationFile, 'r').readlines())
+        with open(FileToUpload, 'w+') as CF:
+            CF.writelines(set(uniqlines))
+        os.remove(ConsolidationFile)
+
+    # Encrypt Sign and Send
+    print("Sign / Encrypt / Send")
+    if (os.path.exists(FileToUpload)):
+        processFile(dicConfig, FileToUpload)
+        os.remove(FileToUpload)
+    else:
+        print("No Hashes to Upload.")
+
+
+
 
 if __name__ == "__main__":
     main()
