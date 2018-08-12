@@ -1,4 +1,4 @@
-#!/usr/bin/Python
+#!/usr/bin/python
 
 import gnupg
 import GMailAPI
