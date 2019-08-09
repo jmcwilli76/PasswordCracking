@@ -20,12 +20,14 @@ class GDrive:
     APPTOKEN = ''
     APPCRED = ''
     APPSCOPE = ''
+    SERVICE = None
     # Declare the class with the required authentication attributes
     def __init__ (self, APPName, APIToken, APICred, APPScope):
         self.APPNAME = APPName
         self.APPTOKEN = APIToken
         self.APPCRED = APICred
         self.APPSCOPE = APPScope
+        self.SERVICE = self.buildService()
         return
 
     def get_credentials(self):
@@ -56,7 +58,7 @@ class GDrive:
         return discovery.build('drive', 'v3', http=http)
 
 
-    def countItems(self, service, Folder, IsFolder=False):
+    def countItems(self, Folder, IsFolder=False):
         """
            This will return the count of the files found unless IsFolder is true.
            You can specify a base folder to start in.
@@ -69,7 +71,7 @@ class GDrive:
         # Initialize the return value.
         retInt = 0
         # Get the list of files and folders.
-        results = self.getItems(service)
+        results = self.getItems()
         # Get the files dictionary from the array.
         items = results.get('files', [])
         # Test the dictionary to see if it is null.
@@ -113,31 +115,31 @@ class GDrive:
         return retInt
 
 
-    def getItems(self, service):
+    def getItems(self):
         retObj = ''
 
         # Get the list of files and folders.
-        retObj = service.files().list(pageSize=10,
+        retObj = self.SERVICE.files().list(pageSize=10,
                                       fields="nextPageToken, files(id, name, parents, properties, trashed, mimeType)"
                                       ).execute()
         # Return the object
         return retObj
 
 
-    def deleteFile(self, service, id):
+    def deleteFile(self, id):
         retObj = ''
         # Get the list of files and folders.
-        retObj = service.files().list(pageSize=10,
+        retObj = self.SERVICE.files().list(pageSize=10,
                                       fields="nextPageToken, files(id, name, parents, properties, trashed, mimeType)"
                                       ).execute()
         return retObj
 
 
-    def moveFile(self, service, SourceFolder, TargetFolder, FileName):
+    def moveFile(self, SourceFolder, TargetFolder, FileName):
         print("Moving file ({0}) from ({1}) to ({2})".format(FileName, SourceFolder, TargetFolder))
-        fileID = self.getFileID(service, FileName)
-        curParID = self.getFolderID(service, SourceFolder)
-        newParID = self.getFolderID(service, TargetFolder)
+        fileID = self.getFileID(FileName)
+        curParID = self.getFolderID(SourceFolder)
+        newParID = self.getFolderID(TargetFolder)
         addParID = "'{0}'".format(newParID)
         remParID = "'{0}'".format(curParID)
 
@@ -146,11 +148,11 @@ class GDrive:
         else:
             try:
                 # Retrieve the existing parents to remove
-                result = service.files().get(fileId=fileID,
+                result = self.SERVICE.files().get(fileId=fileID,
                                              fields='parents').execute()
                 previous_parents = ",".join(result.get('parents'))
                 # Move the file to the new folder
-                result = service.files().update(fileId=fileID,
+                result = self.SERVICE.files().update(fileId=fileID,
                                                 addParents=newParID,
                                                 removeParents=previous_parents,
                                                 fields='id, parents').execute()
@@ -160,27 +162,27 @@ class GDrive:
                 print(error)
                 print("FileID ({0}) : Add Parents ({1}) : Remove Parents ({2})".format(fileID, addParID, remParID))
                 # Get file details
-                self.getFileDetails(service, FileName)
+                self.getFileDetails(FileName)
                 # Get folder details
-                self.getFolderDetails(service, SourceFolder)
-                self.getFolderDetails(service, TargetFolder)
+                self.getFolderDetails(SourceFolder)
+                self.getFolderDetails(TargetFolder)
 
                 exit(500)
         return
 
 
-    def uploadFile(self, service, Folder, FileName, mimeType):
+    def uploadFile(self, Folder, FileName, mimeType):
         retObj = ''
         print("Uploading file ({0}) to ({1}) as ({2})".format(FileName, Folder, mimeType))
 
         if (os.path.exists(FileName)):
             try:
                 # Get the ID of the folder.
-                folderID = self.getFolderID(service, Folder)
+                folderID = self.getFolderID(Folder)
                 # Build the metadata for the file.
                 body = {'name': os.path.split(FileName)[1], 'mimeType': mimeType, 'parents': [folderID]}
                 # Upload the file and get the ID.
-                results = service.files().create(body=body, media_body=FileName,
+                results = self.SERVICE.files().create(body=body, media_body=FileName,
                                                  supportsTeamDrives=True, fields='id').execute().get('id')
 
                 print("File was successfully uploaded.  ID:  {0}".format(results))
@@ -194,11 +196,11 @@ class GDrive:
         return retObj
 
 
-    def getFile(self, service, FileName):
+    def getFile(self, FileName):
         retObj = ''
-        fileId = self.getFileID(service, FileName)
+        fileId = self.getFileID(FileName)
         try:
-            request = service.files().get_media(fileId=fileId)
+            request = self.SERVICE.files().get_media(fileId=fileId)
             fh = io.BytesIO()
             downloader = http.MediaIoBaseDownload(fh, request)
             done = False
@@ -215,8 +217,8 @@ class GDrive:
         return retObj
 
 
-    def listItems(self, service):
-        results = self.getItems(service)
+    def listItems(self):
+        results = self.getItems()
         items = results['files']
         if not items:
             print("No items found!")
@@ -228,15 +230,15 @@ class GDrive:
         return
 
 
-    def listFiles(self, service, Folder):
+    def listFiles(self, Folder):
         retFiles = []
 
         # query = "trashed = False"
         # query = "name = '" + Folder + "'"
         query = "trashed = False and mimeType != 'application/vnd.google-apps.folder'"
-        query += " and parents in '" + self.getFolderID(service, Folder) + "'"
+        query += " and parents in '" + self.getFolderID(Folder) + "'"
         # print("Query:  " + query)
-        results = service.files().list(pageSize=10, q=query,
+        results = self.SERVICE.files().list(pageSize=10, q=query,
                                        fields="nextPageToken, files(name)"
                                        ).execute()
         # Assign the dictionary entry of files to items.  Items is an array.
@@ -253,14 +255,14 @@ class GDrive:
         return retFiles
 
 
-    def getFileID(self, service, FileName):
+    def getFileID(self, FileName):
         retID = ""
         # query = "trashed = False"
         # query = "name = '" + Folder + "'"
         query = "trashed = False and mimeType != 'application/vnd.google-apps.folder'"
         query += " and name = '" + FileName + "'"
         # print("Query:  " + query)
-        results = service.files().list(pageSize=10, q=query,
+        results = self.SERVICE.files().list(pageSize=10, q=query,
                                        fields="nextPageToken, files(id, name, parents, properties, trashed, mimeType)"
                                        ).execute()
         # Assign the dictionary entry of files to items.  Items is an array.
@@ -287,14 +289,14 @@ class GDrive:
         return retID
 
 
-    def getFolderID(self, service, Folder):
+    def getFolderID(self, Folder):
         retID = ""
         # query = "trashed = False"
         # query = "name = '" + Folder + "'"
         query = "trashed = False and mimeType = 'application/vnd.google-apps.folder'"
         query += " and name = '" + Folder + "'"
         # print("Query:  " + query)
-        results = service.files().list(pageSize=10, q=query,
+        results = self.SERVICE.files().list(pageSize=10, q=query,
                                        fields="nextPageToken, files(id, name, parents, properties, trashed, mimeType)"
                                        ).execute()
         # Assign the dictionary entry of files to items.  Items is an array.
@@ -321,18 +323,18 @@ class GDrive:
         return retID
 
 
-    def getFileDetails(self, service, FileName):
+    def getFileDetails(self, FileName):
         retResult = ''
-        fileID = self.getFileID(service, FileName)
-        result = service.files().get(fileId=fileID, fields='id,mimeType,name,parents,trashed').execute()
+        fileID = self.getFileID(FileName)
+        result = self.SERVICE.files().get(fileId=fileID, fields='id,mimeType,name,parents,trashed').execute()
         # print(result)
         return retResult
 
 
-    def getFolderDetails(self, service, FolderName):
+    def getFolderDetails(self, FolderName):
         retResult = ''
-        fileID = self.getFolderID(service, FolderName)
-        result = service.files().get(fileId=fileID, fields='id,mimeType,name,parents,trashed').execute()
+        fileID = self.getFolderID(FolderName)
+        result = self.SERVICE.files().get(fileId=fileID, fields='id,mimeType,name,parents,trashed').execute()
         # print(result)
         return retResult
 

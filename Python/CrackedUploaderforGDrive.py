@@ -17,6 +17,8 @@ TARGETFILE = ''
 APITOKEN = ''
 APICRED = ''
 APIAPPNAME = ''
+MIMETYPE = ''
+APISCOPES = 'https://www.googleapis.com/auth/drive'
 
 
 def readConfigFile(ConfigurationFile):
@@ -39,52 +41,65 @@ def readConfigFile(ConfigurationFile):
 
 
 def setParameters(ConfigDictionary):
-    global SOURCEFOLDER, SOURCEFILE, TARGETFOLDER, TARGETFILE, APITOKEN, APICRED, APIAPPNAME
+    global SOURCEFOLDER, SOURCEFILE, TARGETFOLDER, TARGETFILE, APITOKEN, APICRED, APIAPPNAME, MIMETYPE
 
     for key in ConfigDictionary:
-        if (key == 'GNUPGHome'):
-            GNUPGHOME = ConfigDictionary['GNUPGHome']
-        elif (key == 'Sender'):
-            SENDERADDRESS = ConfigDictionary['Sender']
-        elif (key == 'SignFingerprint'):
-            SIGNFINGERPRINT = ConfigDictionary['SignFingerprint']
+        if (key == 'SourceFolder'):
+            SOURCEFOLDER = ConfigDictionary['SourceFolder']
+
+        elif (key == 'SourceFile'):
+            SOURCEFILE = ConfigDictionary['SourceFile']
+
+        elif (key == 'TargetFolder'):
+            TARGETFOLDER = ConfigDictionary['TargetFolder']
+
+        elif (key == 'TargetFile'):
+            TARGETFILE = ConfigDictionary['TargetFile']
+
+        elif (key == 'APIToken'):
+            APITOKEN = ConfigDictionary['APIToken']
+
+        elif (key == 'APICred'):
+            APICRED = ConfigDictionary['APICred']
+
+        elif (key == 'APPName'):
+            APIAPPNAME = ConfigDictionary['APPName']
+
+        elif (key == 'mimeType'):
+            MIMETYPE = ConfigDictionary['mimeType']
 
     return
 
 
 def startProcess():
+    print('********************  Starting  ********************')
+
     # This is the file that holds the configuration settings.
+    print('Reading Configuration File.')
     dicConfig = readConfigFile('/Temp/EmailConfig.config')
 
     # Set global variables with the dictionary returned.
     setParameters(dicConfig)
 
-    FileName = ''
-    TempFolder = dicConfig['TempFolder']
-    ConsolidationFile = dicConfig['ConsolidatedFile']
-    FileToUpload = dicConfig['FileToUpload']
+    # Check for source file.
+    print('Checking if the source file exists.')
+    print('File:  ' + str(os.path.join(SOURCEFOLDER, SOURCEFILE)))
 
-    # Get the files waiting to be processed
-    print("Get awaiting files.")
-    GDrive.ARGS.Action = 'List'
-    GDrive.ARGS.Folder = dicConfig['GDriveSource']
-    files = GDrive.main()
-    if (len(files) > 0):
-        for file in files:
-            # Loop through the files.
-            print("Downloading file:  " + file)
-            GDrive.ARGS.Action = 'Download'
-            GDrive.ARGS.File = file
-            GDrive.ARGS.Folder = TempFolder
-            result = GDrive.main()
-            print("Downloaded file to:  " + str(result))
+    if os.path.isfile(os.path.join(SOURCEFOLDER, SOURCEFILE)):
+        # Create GDrive object
+        print('Building GDrive object.')
+        gdrive = GDriveAPI.GDrive(APPName=APIAPPNAME, APPScope=APISCOPES, APIToken=APITOKEN, APICred=APICRED)
 
-            # Move the downloaded file on the GDrive.
-            print("Moving file between GDrive folders.")
-            GDrive.ARGS.Action = 'Move'
-            GDrive.ARGS.File = file
-            result = GDrive.main()
-            print("Finished moving file.")
+        print('Uploading file.')
+        result = gdrive.uploadFile(TARGETFOLDER, TARGETFILE, MIMETYPE)
+        print('Upload Result:  ')
+        print(result)
+
+
+    else:
+        print('No source file found!  ' + str(os.path.join(SOURCEFOLDER, SOURCEFILE)))
+
+    print('********************  Starting  ********************')
 
 
 def main():
