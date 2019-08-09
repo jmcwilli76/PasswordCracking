@@ -62,7 +62,8 @@ class GDrive:
                     credentials = tools.run_flow(flow, store)
 
                 else:
-                    auth_url, _ = flow.authorization_url(prompt='consent')
+                    with open(self.APPCRED, 'wb') as appcred:
+                        appcred.write('')
 
         return credentials
 
