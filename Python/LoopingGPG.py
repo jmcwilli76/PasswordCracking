@@ -5,4 +5,4 @@ KeepLooping = True
 while (KeepLooping):
     print("Processing.")
     GPGMail.main()
-    time.sleep(60)
+    time.sleep(10)

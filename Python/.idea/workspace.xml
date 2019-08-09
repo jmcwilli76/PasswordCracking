@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="92b911b3-6eba-4af6-8f44-787de78dbef1" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/LoopingGPG.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DecryptResponse.py" beforeDir="false" afterPath="$PROJECT_DIR$/DecryptResponse.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LoopingGPG.py" beforeDir="false" afterPath="$PROJECT_DIR$/LoopingGPG.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -16,7 +14,7 @@
     <session id="-514714460">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="3" />
+          <entry key="project.closed" value="4" />
           <entry key="project.open.time.3" value="1" />
           <entry key="project.open.time.4" value="3" />
           <entry key="project.opened" value="4" />
@@ -25,12 +23,12 @@
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="Python Console" value="24" />
-          <entry key="py" value="15404" />
+          <entry key="py" value="15405" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Python" value="15428" />
+          <entry key="Python" value="15429" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -137,8 +135,8 @@
         <option value="$PROJECT_DIR$/GMailAPI.py" />
         <option value="$PROJECT_DIR$/GDrive.py" />
         <option value="$PROJECT_DIR$/GPGMail.py" />
-        <option value="$PROJECT_DIR$/LoopingGPG.py" />
         <option value="$PROJECT_DIR$/DecryptResponse.py" />
+        <option value="$PROJECT_DIR$/LoopingGPG.py" />
       </list>
     </option>
   </component>
@@ -345,12 +343,12 @@
   <component name="ToolWindowManager">
     <frame x="200" y="24" width="1402" height="876" extended-state="4" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.14865845" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.14865845" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.328877" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.328877" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.39973262" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
