@@ -54,6 +54,7 @@ class GDrive:
 
         if not credentials or credentials.invalid:
             if credentials and credentials.expired and credentials.refresh_token:
+                print('Refreshing Token')
                 credentials.refresh(Request())
 
             else:
