@@ -49,6 +49,7 @@ class GDrive:
         store = Storage(self.APPTOKEN)
 
         if os.path.exists(self.APPTOKEN):
+
             credentials = store.get()
 
         if not credentials or credentials.invalid:
@@ -57,11 +58,19 @@ class GDrive:
 
             else:
                 if os.path.exists(self.APPCRED):
-                    flow = client.flow_from_clientsecrets(self.APPCRED, self.APPSCOPE)
-                    flow.user_agent = self.APPNAME
-                    credentials = tools.run_flow(flow, store)
+                    if os.path.getsize(self.APPCRED) > 400:
+                        flow = client.flow_from_clientsecrets(self.APPCRED, self.APPSCOPE)
+                        flow.user_agent = self.APPNAME
+                        credentials = tools.run_flow(flow, store)
+
+                    else:
+                        print('Credential File is too small!')
+                        print('File:  ' + self.APPCRED)
+                        exit(350)
 
                 else:
+                    print('*****  Creating App Cred file  *****')
+                    print('File:  ' + self.APPCRED)
                     with open(self.APPCRED, 'wb') as appcred:
                         appcred.write('')
 
