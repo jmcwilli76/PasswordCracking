@@ -97,7 +97,7 @@ def startProcess(ConfigFile):
     if os.path.isfile(os.path.join(SOURCEFOLDER, SOURCEFILE)):
         # Remove system argument
         if len(sys.argv) > 1:
-            sys.argv[1] = None
+            sys.argv.pop(1)
 
         # Create GDrive object
         print('Building GDrive object.')
