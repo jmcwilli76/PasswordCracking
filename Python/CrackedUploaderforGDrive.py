@@ -81,11 +81,11 @@ def setParameters(ConfigDictionary):
     return
 
 
-def startProcess():
+def startProcess(ConfigFile):
     print('********************  Starting  ********************')
 
     # This is the file that holds the configuration settings.
-    dicConfig = readConfigFile('/Temp/CrackUpload.config')
+    dicConfig = readConfigFile(ConfigFile)
 
     # Set global variables with the dictionary returned.
     setParameters(dicConfig)
@@ -112,7 +112,11 @@ def startProcess():
 
 
 def main():
-    startProcess()
+    if len(sys.argv) > 1:
+        startProcess(sys.argv[1])
+
+    else:
+        startProcess('/Temp/CrackUpload.config')
     return
 
 if __name__ == '__main__':
