@@ -60,8 +60,11 @@ class GDrive:
             else:
                 if os.path.exists(self.APPCRED):
                     if os.path.getsize(self.APPCRED) > 400:
+                        print('Getting flow contents.')
                         flow = client.flow_from_clientsecrets(self.APPCRED, self.APPSCOPE)
+                        print('Getting user agent name.')
                         flow.user_agent = self.APPNAME
+                        print('Getting user credential.')
                         credentials = tools.run_flow(flow, store)
 
                     else:
