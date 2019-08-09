@@ -65,6 +65,8 @@ class GDrive:
                     with open(self.APPCRED, 'wb') as appcred:
                         appcred.write('')
 
+                    exit(300)
+
         return credentials
 
     def buildService(self):
