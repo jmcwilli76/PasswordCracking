@@ -1,0 +1,10 @@
+Thank you, your key has been successfully confirmed.
+
+You can start submitting cracks as soon as the contest has started.
+
+Keep an eye on the contest website; we may release some test hashes
+a few days before the contest, so teams can confirm their submission
+process works.
+
+Don't forget to let us know if you want to compete as a 'Pro' team.
+
