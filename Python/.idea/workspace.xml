@@ -3,6 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="92b911b3-6eba-4af6-8f44-787de78dbef1" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GDrive.py" beforeDir="false" afterPath="$PROJECT_DIR$/GDrive.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GMailAPI.py" beforeDir="false" afterPath="$PROJECT_DIR$/GMailAPI.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />

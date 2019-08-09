@@ -39,6 +39,9 @@ def get_credentials():
     Returns:
         Credentials, the obtained credential.
     """
+    # If the token has expired just delete it for the Drive and GMail.
+    # It will then be recreated.  A link will be generated or a web page will
+    # be opened that you will need to login and grant access to this application.
 
     store = Storage(TOKEN_SECRET_FILE)
     credentials = store.get()

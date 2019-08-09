@@ -17,6 +17,9 @@ from urllib2 import HTTPError
 
 class GMailAPI():
     def __init__(self, SenderAddress, TokenLocation, CredentialLocation, Scopes):
+        # If the token has expired just delete it for the Drive and GMail.
+        # It will then be recreated.  A link will be generated or a web page will
+        # be opened that you will need to login and grant access to this application.
 
         if (TokenLocation == ""):
             self.TOKEN = '/Temp/GMail.API.token.json'
