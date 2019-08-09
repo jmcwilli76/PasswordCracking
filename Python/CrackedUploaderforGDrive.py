@@ -95,6 +95,10 @@ def startProcess(ConfigFile):
     print('File:  ' + str(os.path.join(SOURCEFOLDER, SOURCEFILE)))
 
     if os.path.isfile(os.path.join(SOURCEFOLDER, SOURCEFILE)):
+        # Remove system argument
+        if len(sys.argv) > 1:
+            sys.argv[1] = None
+
         # Create GDrive object
         print('Building GDrive object.')
         gdrive = GDriveAPI.GDrive(APPName=APIAPPNAME, APPScope=APISCOPES, APIToken=APITOKEN, APICred=APICRED)
