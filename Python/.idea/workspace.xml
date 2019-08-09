@@ -2,122 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="92b911b3-6eba-4af6-8f44-787de78dbef1" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/LoopingGPG.py" beforeDir="false" afterPath="$PROJECT_DIR$/LoopingGPG.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
-  </component>
-  <component name="FUSProjectUsageTrigger">
-    <session id="-514714460">
-      <usages-collector id="statistics.lifecycle.project">
-        <counts>
-          <entry key="project.closed" value="4" />
-          <entry key="project.open.time.3" value="1" />
-          <entry key="project.open.time.4" value="3" />
-          <entry key="project.opened" value="4" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.extensions.edit">
-        <counts>
-          <entry key="Python Console" value="24" />
-          <entry key="py" value="15405" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.types.edit">
-        <counts>
-          <entry key="Python" value="15429" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.extensions.open">
-        <counts>
-          <entry key="py" value="6" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.types.open">
-        <counts>
-          <entry key="Python" value="6" />
-        </counts>
-      </usages-collector>
-    </session>
-  </component>
-  <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/GPGMail.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="771">
-              <caret line="201" column="9" lean-forward="true" selection-start-line="201" selection-start-column="9" selection-end-line="201" selection-end-column="9" />
-              <folding>
-                <element signature="e#19#31#0" expanded="true" />
-                <element signature="e#610#1081#0" />
-                <marker date="1534045353424" expanded="true" signature="208:580" ph="..." />
-                <marker date="1534045353424" expanded="true" signature="3653:3672" ph="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/LoopingGPG.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="144">
-              <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
-              <folding>
-                <element signature="e#0#14#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/DecryptResponse.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret column="12" selection-start-column="12" selection-end-column="12" />
-              <folding>
-                <element signature="e#19#31#0" expanded="true" />
-                <element signature="e#92#563#0" />
-                <marker date="1534046801312" expanded="true" signature="2816:2840" ph="..." />
-                <marker date="1534046801312" expanded="true" signature="3699:3702" ph="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/GMailAPI.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="378">
-              <caret line="186" lean-forward="true" selection-start-line="186" selection-end-line="186" />
-              <folding>
-                <element signature="e#0#37#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/GDrive.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="213">
-              <caret line="279" column="30" selection-start-line="279" selection-start-column="30" selection-end-line="279" selection-end-column="30" />
-              <folding>
-                <element signature="e#18#55#0" expanded="true" />
-                <element signature="e#749#1000#1" />
-                <marker date="1534043919484" expanded="false" signature="4705:4726" ph="..." />
-                <marker date="1534043919484" expanded="true" signature="6896:6910" ph="..." />
-                <marker date="1534043919484" expanded="true" signature="7898:8715" ph="..." />
-                <marker date="1534043919484" expanded="true" signature="8748:9487" ph="..." />
-                <marker date="1534043919484" expanded="true" signature="11672:12127" ph="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -129,23 +20,7 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
-  <component name="IdeDocumentHistory">
-    <option name="CHANGED_PATHS">
-      <list>
-        <option value="$PROJECT_DIR$/GMailAPI.py" />
-        <option value="$PROJECT_DIR$/GDrive.py" />
-        <option value="$PROJECT_DIR$/GPGMail.py" />
-        <option value="$PROJECT_DIR$/DecryptResponse.py" />
-        <option value="$PROJECT_DIR$/LoopingGPG.py" />
-      </list>
-    </option>
-  </component>
-  <component name="ProjectFrameBounds" extendedState="4">
-    <option name="x" value="200" />
-    <option name="y" value="24" />
-    <option name="width" value="1402" />
-    <option name="height" value="876" />
-  </component>
+  <component name="ProjectId" id="1PAbF5HaKbA6iSS8B7KPTQLI1ri" />
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
       <profile-state>
@@ -166,30 +41,8 @@
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
   </component>
-  <component name="ProjectView">
-    <navigator proportions="" version="1">
-      <foldersAlwaysOnTop value="true" />
-    </navigator>
-    <panes>
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="Python" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Python" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Python" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
-      <pane id="Scope" />
-    </panes>
-  </component>
   <component name="PropertiesComponent">
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RunDashboard">
@@ -340,100 +193,15 @@
     </task>
     <servers />
   </component>
-  <component name="ToolWindowManager">
-    <frame x="200" y="24" width="1402" height="876" extended-state="4" />
-    <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.14865845" />
-      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info id="Favorites" order="2" side_tool="true" />
-      <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.328877" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.39973262" />
-      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Version Control" order="7" />
-      <window_info anchor="bottom" id="Terminal" order="8" />
-      <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
-      <window_info anchor="bottom" id="Python Console" order="10" weight="0.328877" />
-      <window_info anchor="right" id="Commander" order="0" weight="0.4" />
-      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
-      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-    </layout>
-  </component>
-  <component name="VcsContentAnnotationSettings">
-    <option name="myLimit" value="2678400000" />
-  </component>
-  <component name="editorHistoryManager">
-    <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/pydevd.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="139">
-          <caret line="1067" selection-start-line="1067" selection-end-line="1067" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/GMailAPI.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="378">
-          <caret line="186" lean-forward="true" selection-start-line="186" selection-end-line="186" />
-          <folding>
-            <element signature="e#0#37#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/GDrive.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="213">
-          <caret line="279" column="30" selection-start-line="279" selection-start-column="30" selection-end-line="279" selection-end-column="30" />
-          <folding>
-            <element signature="e#18#55#0" expanded="true" />
-            <element signature="e#749#1000#1" />
-            <marker date="1534043919484" expanded="false" signature="4705:4726" ph="..." />
-            <marker date="1534043919484" expanded="true" signature="6896:6910" ph="..." />
-            <marker date="1534043919484" expanded="true" signature="7898:8715" ph="..." />
-            <marker date="1534043919484" expanded="true" signature="8748:9487" ph="..." />
-            <marker date="1534043919484" expanded="true" signature="11672:12127" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/GPGMail.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="771">
-          <caret line="201" column="9" lean-forward="true" selection-start-line="201" selection-start-column="9" selection-end-line="201" selection-end-column="9" />
-          <folding>
-            <element signature="e#19#31#0" expanded="true" />
-            <element signature="e#610#1081#0" />
-            <marker date="1534045353424" expanded="true" signature="208:580" ph="..." />
-            <marker date="1534045353424" expanded="true" signature="3653:3672" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/DecryptResponse.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="12" selection-start-column="12" selection-end-column="12" />
-          <folding>
-            <element signature="e#19#31#0" expanded="true" />
-            <element signature="e#92#563#0" />
-            <marker date="1534046801312" expanded="true" signature="2816:2840" ph="..." />
-            <marker date="1534046801312" expanded="true" signature="3699:3702" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/LoopingGPG.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="144">
-          <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
-          <folding>
-            <element signature="e#0#14#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>
