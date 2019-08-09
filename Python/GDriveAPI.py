@@ -171,18 +171,18 @@ class GDrive:
         return
 
 
-    def uploadFile(self, Folder, FileName, mimeType):
+    def uploadFile(self, SourceFile, TargetFolder, TargetFileName, mimeType):
         retObj = ''
-        print("Uploading file ({0}) to ({1}) as ({2})".format(FileName, Folder, mimeType))
+        print("Uploading file ({0}) to ({1}) as ({2})".format(SourceFile, TargetFolder, mimeType))
 
-        if (os.path.exists(FileName)):
+        if (os.path.exists(SourceFile)):
             try:
                 # Get the ID of the folder.
-                folderID = self.getFolderID(Folder)
+                folderID = self.getFolderID(TargetFolder)
                 # Build the metadata for the file.
-                body = {'name': os.path.split(FileName)[1], 'mimeType': mimeType, 'parents': [folderID]}
+                body = {'name': os.path.split(TargetFileName)[1], 'mimeType': mimeType, 'parents': [folderID]}
                 # Upload the file and get the ID.
-                results = self.SERVICE.files().create(body=body, media_body=FileName,
+                results = self.SERVICE.files().create(body=body, media_body=SourceFile,
                                                  supportsTeamDrives=True, fields='id').execute().get('id')
 
                 print("File was successfully uploaded.  ID:  {0}".format(results))
@@ -191,7 +191,7 @@ class GDrive:
                 print(error)
                 exit(409)
         else:
-            print("File not found!  File:  {0}".format(FileName))
+            print("File not found!  File:  {0}".format(SourceFile))
 
         return retObj
 

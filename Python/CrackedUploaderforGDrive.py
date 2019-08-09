@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 import os
+import sys
 import GDriveAPI
 
 
@@ -24,13 +25,17 @@ APISCOPES = 'https://www.googleapis.com/auth/drive'
 def readConfigFile(ConfigurationFile):
     retDic = {}
     try:
-        print('Reading configuration file.')
+        print('Reading configuration from file.')
         print('File:  ' + ConfigurationFile)
         with open(ConfigurationFile, 'r') as CF:
+            #print('Opened file for reading.  Reading lines.')
             for line in CF.readlines():
+                #print('Reding Line.')
+                #print('Line:  ' + str(line))
                 line = line.strip('\n')
-                key, value = line.split('=')
-                retDic[key] = value
+                if line != '':
+                    key, value = line.split('=')
+                    retDic[key] = value
 
     except:
         print('Failed to read the configuration file.')
@@ -68,6 +73,11 @@ def setParameters(ConfigDictionary):
         elif (key == 'mimeType'):
             MIMETYPE = ConfigDictionary['mimeType']
 
+    if SOURCEFOLDER == '' or SOURCEFILE == '' or TARGETFOLDER == '' or TARGETFILE == '' or APITOKEN == ''\
+            or APICRED == '' or APIAPPNAME == '' or MIMETYPE == '':
+        print('Missing configuration variables!')
+        exit(200)
+
     return
 
 
@@ -75,8 +85,7 @@ def startProcess():
     print('********************  Starting  ********************')
 
     # This is the file that holds the configuration settings.
-    print('Reading Configuration File.')
-    dicConfig = readConfigFile('/Temp/EmailConfig.config')
+    dicConfig = readConfigFile('/Temp/CrackUpload.config')
 
     # Set global variables with the dictionary returned.
     setParameters(dicConfig)
@@ -91,7 +100,7 @@ def startProcess():
         gdrive = GDriveAPI.GDrive(APPName=APIAPPNAME, APPScope=APISCOPES, APIToken=APITOKEN, APICred=APICRED)
 
         print('Uploading file.')
-        result = gdrive.uploadFile(TARGETFOLDER, TARGETFILE, MIMETYPE)
+        result = gdrive.uploadFile(os.path.join(SOURCEFOLDER, SOURCEFILE), TARGETFOLDER, TARGETFILE, MIMETYPE)
         print('Upload Result:  ')
         print(result)
 
@@ -103,6 +112,7 @@ def startProcess():
 
 
 def main():
+    startProcess()
     return
 
 if __name__ == '__main__':
