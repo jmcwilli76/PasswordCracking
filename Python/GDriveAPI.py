@@ -6,6 +6,7 @@ import httplib2
 from apiclient import discovery, http
 from oauth2client import file, client, tools
 from oauth2client.file import Storage
+from google.auth.transport.requests import Request
 
 
 """
@@ -43,12 +44,25 @@ class GDrive:
         # It will then be recreated.  A link will be generated or a web page will
         # be opened that you will need to login and grant access to this application.
 
+        credentials = None
+
         store = Storage(self.APPTOKEN)
-        credentials = store.get()
+
+        if os.path.exists(self.APPTOKEN):
+            credentials = store.get()
+
         if not credentials or credentials.invalid:
-            flow = client.flow_from_clientsecrets(self.APPCRED, self.APPSCOPE)
-            flow.user_agent = self.APPNAME
-            credentials = tools.run_flow(flow, store)
+            if credentials and credentials.expired and credentials.refresh_token:
+                credentials.refresh(Request())
+
+            else:
+                if os.path.exists(self.APPCRED):
+                    flow = client.flow_from_clientsecrets(self.APPCRED, self.APPSCOPE)
+                    flow.user_agent = self.APPNAME
+                    credentials = tools.run_flow(flow, store)
+
+                else:
+                    auth_url, _ = flow.authorization_url(prompt='consent')
 
         return credentials
 

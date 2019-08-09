@@ -7,7 +7,6 @@ import argparse
 from apiclient import discovery, http
 from oauth2client import file, client, tools
 from oauth2client.file import Storage
-from google.auth.transport.requests import Request
 
 
 # If modifying these scopes, delete your previously saved credentials
@@ -45,16 +44,11 @@ def get_credentials():
     # be opened that you will need to login and grant access to this application.
 
     store = Storage(TOKEN_SECRET_FILE)
-
     credentials = store.get()
-
-    if not credentials or not credentials.valid:
-        if credentials and credentials.expired and credentials.refresh_token:
-            credentials.refresh(Request())
-        else:
-            flow = client.flow_from_clientsecrets(CLIENT_SECRET_FILE, SCOPES)
-            flow.user_agent = APPLICATION_NAME
-            credentials = tools.run_flow(flow, store)
+    if not credentials or credentials.invalid:
+        flow = client.flow_from_clientsecrets(CLIENT_SECRET_FILE, SCOPES)
+        flow.user_agent = APPLICATION_NAME
+        credentials = tools.run_flow(flow, store)
 
     return credentials
 
