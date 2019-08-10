@@ -2,6 +2,7 @@
 
 import os
 import io
+import json
 import httplib2
 from apiclient import discovery, http
 from oauth2client import file, client, tools
@@ -226,6 +227,47 @@ class GDrive:
         return retObj
 
 
+    def updateFile(self, SourceFile, TargetFolder, TargetFileName, mimeType):
+        retObj = ''
+        print("Getting file detials with ({0}) in folder ({1})".format(TargetFileName, TargetFolder))
+        fileID = self.getFileID(TargetFileName)
+        folderID = self.getFolderID(TargetFolder)
+        filedetails = self.getFileDetails(TargetFileName)
+        # Convert string to json.
+        fd = json.dumps(filedetails)
+
+        # Convert json to dictionary
+        xd = json.loads(fd)
+
+        # Check to see if the target folder is in the Parents collection.
+        if 'parents' in xd:
+            folders = xd['parents']
+
+            if folderID in folders:
+                print('Found file in proper folder.')
+                print(xd)
+
+                theFile = self.SERVICE.files().get(fileId=fileID).execute()
+
+                # Build the metadata for the file.
+                body = {'name': os.path.split(TargetFileName)[1], 'mimeType': mimeType}
+
+                # Upload the file and get the ID.
+                retObj = self.SERVICE.files().update(fileId=fileID, body=body, media_body=SourceFile,
+                                                      ).execute()
+
+
+            else:
+                print('File found but file is not in the proper folder.')
+
+        else:
+            print('No Folder / Parents found for file.')
+
+
+
+        return retObj
+
+
     def getFile(self, FileName):
         retObj = ''
         fileId = self.getFileID(FileName)
@@ -355,16 +397,16 @@ class GDrive:
 
     def getFileDetails(self, FileName):
         retResult = ''
-        fileID = self.getFileID(FileName)
-        result = self.SERVICE.files().get(fileId=fileID, fields='id,mimeType,name,parents,trashed').execute()
-        # print(result)
+        ID = self.getFileID(FileName)
+        retResult = self.SERVICE.files().get(fileId=ID, fields='id,mimeType,name,parents,trashed').execute()
+
         return retResult
 
 
     def getFolderDetails(self, FolderName):
         retResult = ''
-        fileID = self.getFolderID(FolderName)
-        result = self.SERVICE.files().get(fileId=fileID, fields='id,mimeType,name,parents,trashed').execute()
+        ID = self.getFolderID(FolderName)
+        result = self.SERVICE.files().get(fileId=ID, fields='id,mimeType,name,parents,trashed').execute()
         # print(result)
         return retResult
 
