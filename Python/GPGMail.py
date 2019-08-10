@@ -4,10 +4,16 @@ import gnupg
 import GMailAPI
 import os
 import GDrive
+import GDriveAPI
 
 GNUPGHOME = ''
 SENDERADDRESS = ''
 SIGNFINGERPRINT = ''
+APPNAME = ''
+APPCRED = ''
+APPTOKEN = ''
+APPSCOPE = ''
+
 
 def encryptData(TargetFile, Recipient, SignAlso = True, SignerPassPhrase = ''):
     gpg = gnupg.GPG(gnupghome=GNUPGHOME)
@@ -42,13 +48,29 @@ def readConfigFile(ConfigurationFile):
     return retDic
 
 def setParameters(ConfigDictionary):
-    global GNUPGHOME, SENDERADDRESS, SIGNFINGERPRINT
+    global GNUPGHOME, SENDERADDRESS, SIGNFINGERPRINT, APPNAME, APPSCOPE, APPTOKEN, APPCRED
 
     for key in ConfigDictionary:
+        #print('Key  :  ' + key)
+        #print('Value:  ' + ConfigDictionary[key])
         if (key == 'GNUPGHome'):
             GNUPGHOME = ConfigDictionary['GNUPGHome']
+
         elif (key == 'Sender'):
             SENDERADDRESS = ConfigDictionary['Sender']
+
+        elif (key == 'DriveAPPName'):
+            APPNAME = ConfigDictionary['DriveAPPName']
+
+        elif (key == 'DriveScopes'):
+            APPSCOPE = ConfigDictionary['DriveScopes']
+
+        elif (key == 'DriveAPIToken'):
+            APPTOKEN = ConfigDictionary['DriveAPIToken']
+
+        elif (key == 'DriveAPICred'):
+            APPCRED = ConfigDictionary['DriveAPICred']
+
         elif (key == 'SignFingerprint'):
             SIGNFINGERPRINT = ConfigDictionary['SignFingerprint']
 
@@ -73,7 +95,7 @@ def processFile(dicConfig, FileName):
     TempFolder = dicConfig['TempFolder']
     TempFile = dicConfig['TempFile']
     SignerPassPhrase = dicConfig['SignerPhraseFile']
-    Scopes = dicConfig['Scopes']
+    Scopes = dicConfig['MailScopes']
 
     # Build the GMail object
     GMAIL = GMailAPI.GMailAPI(SENDERADDRESS, dicConfig['APIToken'], dicConfig['APICred'], Scopes)
@@ -145,28 +167,35 @@ def main():
     ConsolidationFile = dicConfig['ConsolidatedFile']
     FileToUpload = dicConfig['FileToUpload']
 
+    # Create GDrive Object
+    newGDrive = GDriveAPI.GDrive(APPName=APPNAME, APIToken=APPTOKEN, APICred=APPCRED, APPScope=APPSCOPE)
+
     # Get the files waiting to be processed
-    print("Get awaiting files.")
-    GDrive.ARGS.Action = 'List'
-    GDrive.ARGS.Folder = dicConfig['GDriveSource']
-    files = GDrive.main()
-    print('Files:  ' + str(files))
+    print("Getting files from folder ({0}).".format(dicConfig['GDriveSource']))
+
+    files = newGDrive.getFiles(dicConfig['GDriveSource'])
+
+    print('Found ({0}) files.'.format(len(files)))
+
     if (len(files) > 0):
         for file in files:
             # Loop through the files.
             print("Downloading file:  " + file)
-            GDrive.ARGS.Action = 'Download'
-            GDrive.ARGS.File = file
-            GDrive.ARGS.Folder = TempFolder
-            result = GDrive.main()
-            print("Downloaded file to:  " + str(result))
+            stream = newGDrive.getFile(dicConfig['GDriveSource'], file)
 
-            #Move the downloaded file on the GDrive.
-            print("Moving file between GDrive folders.")
-            GDrive.ARGS.Action = 'Move'
-            GDrive.ARGS.File = file
-            result = GDrive.main()
-            print("Finished moving file.")
+            if stream != '':
+                with open(os.path.join(dicConfig['TempFolder'], file), 'a') as newfile:
+                    newfile.write(stream)
+                    newfile.flush()
+
+                #Move the downloaded file on the GDrive.
+                print("Moving file between GDrive folders.")
+                result = newGDrive.moveFile(dicConfig['GDriveSource'], dicConfig['GDriveTarget'], file)
+
+                print("Finished moving file.  " + str(result))
+
+    else:
+        print('No Files Found.')
 
     # Consolidate the files to one file.
     print("Consolidating files.")

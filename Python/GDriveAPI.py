@@ -4,6 +4,7 @@ import os
 import io
 import json
 import httplib2
+import urllib3
 from apiclient import discovery, http
 from oauth2client import file, client, tools
 from oauth2client.file import Storage
@@ -157,6 +158,36 @@ class GDrive:
         return retObj
 
 
+    def getFiles(self, FolderName):
+        retObj = ''
+
+        folderID = self.getFolderID(FolderName)
+
+        query = "trashed = False and mimeType != 'application/vnd.google-apps.folder'"
+        query += " and '" + folderID + "' in parents"
+
+        results = self.SERVICE.files().list(pageSize=10, q=query,
+                                            fields="nextPageToken, files(name)"
+                                            ).execute()
+
+        flj = json.dumps(results)
+        fld = json.loads(flj)
+        if 'files' in fld:
+            files = fld['files']
+
+            names = []
+            for file in files:
+                if 'name' in file:
+                    names.append(file['name'])
+
+            retObj = names
+
+        else:
+            print('No files found!')
+
+        return retObj
+
+
     def deleteFile(self, id):
         retObj = ''
         # Get the list of files and folders.
@@ -168,7 +199,7 @@ class GDrive:
 
     def moveFile(self, SourceFolder, TargetFolder, FileName):
         print("Moving file ({0}) from ({1}) to ({2})".format(FileName, SourceFolder, TargetFolder))
-        fileID = self.getFileID(FileName)
+        fileID = self.getFileID(SourceFolder, FileName)
         curParID = self.getFolderID(SourceFolder)
         newParID = self.getFolderID(TargetFolder)
         addParID = "'{0}'".format(newParID)
@@ -271,20 +302,48 @@ class GDrive:
     def getFile(self, FolderName, FileName):
         retObj = ''
         fileId = self.getFileID(FolderName, FileName)
-        try:
-            request = self.SERVICE.files().get_media(fileId=fileId)
-            fh = io.BytesIO()
-            downloader = http.MediaIoBaseDownload(fh, request)
-            done = False
-            while done is False:
-                status, done = downloader.next_chunk()
-                print("Download %d%%." % int(status.progress() * 100))
-            retObj = fh.getvalue()
+        fileMeta = self.getFileDetails(FolderName, FileName)
+        fm = json.dumps(fileMeta)
+        fd = json.loads(fm)
+        fileSize = '0'
 
-        except Exception as error:
-            print("An error has occured!")
-            print(error)
-            exit(409)
+        if 'size' in fd:
+            fileSize = fd['size']
+
+            if fileSize != '0':
+
+                try:
+                    print('Download Starting.')
+                    request = self.SERVICE.files().get_media(fileId=fileId)
+                    fh = io.BytesIO()
+                    downloader = http.MediaIoBaseDownload(fh, request)
+                    done = False
+
+                    while done is False:
+                        status, done = downloader.next_chunk()
+                        print("Download %d%%." % int(status.progress() * 100))
+
+                    print('Download Finished.')
+
+                    retObj = fh.getvalue()
+
+                except urllib3.exceptions.HTTPError as error:
+                    print('HTTP Error occured!')
+
+                    if hasattr(error, 'code'):
+                        print('Error Code:  ' + str(error.code))
+
+                    if hasattr(error, 'reason'):
+                        print('Error Code:  ' + str(error.reason))
+
+                except Exception as error:
+                    print("An error has occured!")
+                    print(error)
+                    exit(409)
+
+            else:
+                print('File ({0}) has a size of 0'.format(FileName))
+                retObj = ''
 
         return retObj
 
@@ -341,7 +400,7 @@ class GDrive:
 
         # Assign the dictionary entry of files to items.  Items is an array.
         items = results['files']
-        print('Files:  ' + str(items))
+
         # Check the array.
         if not items:
             print("No files found!")
@@ -350,8 +409,10 @@ class GDrive:
         if (len(items) == 1):
             # print("Found 1 result!")
             result = items[0]
+
             if not result:
                 print("Empty result found!")
+
             else:
                 retID = result['id']
 
@@ -402,7 +463,7 @@ class GDrive:
     def getFileDetails(self, FolderName, FileName):
         retResult = ''
         ID = self.getFileID(FolderName, FileName)
-        retResult = self.SERVICE.files().get(fileId=ID, fields='id,mimeType,name,parents,trashed').execute()
+        retResult = self.SERVICE.files().get(fileId=ID, fields='id,size,mimeType,name,parents,trashed').execute()
 
         return retResult
 
