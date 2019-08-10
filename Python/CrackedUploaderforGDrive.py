@@ -103,13 +103,16 @@ def startProcess(ConfigFile):
         print('Building GDrive object.')
         gdrive = GDriveAPI.GDrive(APPName=APIAPPNAME, APPScope=APISCOPES, APIToken=APITOKEN, APICred=APICRED)
 
-        print('Uploading file.')
+        print('Checking if file already exists.')
         # Check to see if the file already exists.
         result = gdrive.getFileID(TARGETFILE)
 
         if result == '':
+            print('No file found.  Uploading new.')
             result = gdrive.uploadFile(os.path.join(SOURCEFOLDER, SOURCEFILE), TARGETFOLDER, TARGETFILE, MIMETYPE)
+
         else:
+            print('File found.  Updating.')
             result = gdrive.updateFile(os.path.join(SOURCEFOLDER, SOURCEFILE), TARGETFOLDER, TARGETFILE, MIMETYPE)
 
         print('Upload Result:  Type ({0})'.format(str(type(result))))
