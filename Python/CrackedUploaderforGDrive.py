@@ -113,6 +113,7 @@ def startProcess(ConfigFile):
 
         else:
             print('File found.  Updating.')
+            print('File ID:  ' + result)
             result = gdrive.updateFile(os.path.join(SOURCEFOLDER, SOURCEFILE), TARGETFOLDER, TARGETFILE, MIMETYPE)
 
         print('Upload Result:  Type ({0})'.format(str(type(result))))
