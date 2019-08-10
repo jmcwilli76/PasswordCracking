@@ -105,17 +105,19 @@ def startProcess(ConfigFile):
 
         print('Checking if file already exists.')
         # Check to see if the file already exists.
-        #result = gdrive.getFileID(TARGETFILE, TARGETFOLDER)
-        result = ''
+        result = gdrive.getFileID(TARGETFOLDER, TARGETFILE)
 
         if result == '':
             print('No file found.  Uploading new.')
             result = gdrive.uploadFile(os.path.join(SOURCEFOLDER, SOURCEFILE), TARGETFOLDER, TARGETFILE, MIMETYPE)
 
-        else:
+        elif result != '0000':
             print('File found.  Updating.')
             print('File ID:  ' + result)
             result = gdrive.updateFile(os.path.join(SOURCEFOLDER, SOURCEFILE), TARGETFOLDER, TARGETFILE, MIMETYPE)
+
+        else:
+            print('Too many files found!')
 
         print('Upload Result:  Type ({0})'.format(str(type(result))))
         print(result)

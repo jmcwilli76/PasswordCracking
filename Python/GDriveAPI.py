@@ -230,9 +230,9 @@ class GDrive:
     def updateFile(self, SourceFile, TargetFolder, TargetFileName, mimeType):
         retObj = ''
         print("Getting file detials with ({0}) in folder ({1})".format(TargetFileName, TargetFolder))
-        fileID = self.getFileID(TargetFileName)
+        fileID = self.getFileID(TargetFolder, TargetFileName)
         folderID = self.getFolderID(TargetFolder)
-        filedetails = self.getFileDetails(TargetFileName)
+        filedetails = self.getFileDetails(TargetFolder, TargetFileName)
         # Convert string to json.
         fd = json.dumps(filedetails)
 
@@ -268,9 +268,9 @@ class GDrive:
         return retObj
 
 
-    def getFile(self, FileName):
+    def getFile(self, FolderName, FileName):
         retObj = ''
-        fileId = self.getFileID(FileName)
+        fileId = self.getFileID(FolderName, FileName)
         try:
             request = self.SERVICE.files().get_media(fileId=fileId)
             fh = io.BytesIO()
@@ -327,19 +327,21 @@ class GDrive:
         return retFiles
 
 
-    def getFileID(self, FileName):
+    def getFileID(self, FolderName, FileName):
         retID = ""
-        # query = "trashed = False"
-        # query = "name = '" + Folder + "'"
+
+        folderID = self.getFolderID(FolderName)
+
         query = "trashed = False and mimeType != 'application/vnd.google-apps.folder'"
-        query += " and name = '" + FileName + "'"
-        # print("Query:  " + query)
+        query += " and name = '" + FileName + "' and '" + folderID + "' in parents"
+
         results = self.SERVICE.files().list(pageSize=10, q=query,
                                        fields="nextPageToken, files(id, name, parents, properties, trashed, mimeType)"
                                        ).execute()
+
         # Assign the dictionary entry of files to items.  Items is an array.
         items = results['files']
-
+        print('Files:  ' + str(items))
         # Check the array.
         if not items:
             print("No files found!")
@@ -352,11 +354,13 @@ class GDrive:
                 print("Empty result found!")
             else:
                 retID = result['id']
+
         elif (len(items) == 0):
             print("Found 0 results!")
+
         elif (len(items) >= 2):
             print("Found more than 1 result!")
-            exit(500)
+            retID = '0000'
 
         return retID
 
@@ -395,9 +399,9 @@ class GDrive:
         return retID
 
 
-    def getFileDetails(self, FileName):
+    def getFileDetails(self, FolderName, FileName):
         retResult = ''
-        ID = self.getFileID(FileName)
+        ID = self.getFileID(FolderName, FileName)
         retResult = self.SERVICE.files().get(fileId=ID, fields='id,mimeType,name,parents,trashed').execute()
 
         return retResult

@@ -5,6 +5,7 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CrackedUploaderforGDrive.py" beforeDir="false" afterPath="$PROJECT_DIR$/CrackedUploaderforGDrive.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GDriveAPI.py" beforeDir="false" afterPath="$PROJECT_DIR$/GDriveAPI.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GPGMail.py" beforeDir="false" afterPath="$PROJECT_DIR$/GPGMail.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -175,9 +176,9 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python.CrackedUploaderforGDrive" />
+        <item itemvalue="Python.GPGMail" />
         <item itemvalue="Python.LoopingGPG" />
         <item itemvalue="Python.DecryptResponse" />
-        <item itemvalue="Python.GPGMail" />
         <item itemvalue="Python.GDrive" />
       </list>
     </recent_temporary>
@@ -312,7 +313,14 @@
       <option name="project" value="LOCAL" />
       <updated>1565401237059</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="Cracked hash upload.&#10;rev 1:working">
+      <created>1565402040706</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1565402040706</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

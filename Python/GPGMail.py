@@ -150,6 +150,7 @@ def main():
     GDrive.ARGS.Action = 'List'
     GDrive.ARGS.Folder = dicConfig['GDriveSource']
     files = GDrive.main()
+    print('Files:  ' + str(files))
     if (len(files) > 0):
         for file in files:
             # Loop through the files.
