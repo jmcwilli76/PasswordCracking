@@ -342,14 +342,14 @@ class GDrive:
 
         # Check the array.
         if not items:
-            print("No ")
+            print("No files found!")
 
         # Check the number of folders found.
         if (len(items) == 1):
             # print("Found 1 result!")
             result = items[0]
             if not result:
-                print("Found result not found!")
+                print("Empty result found!")
             else:
                 retID = result['id']
         elif (len(items) == 0):

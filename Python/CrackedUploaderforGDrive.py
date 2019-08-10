@@ -105,7 +105,8 @@ def startProcess(ConfigFile):
 
         print('Checking if file already exists.')
         # Check to see if the file already exists.
-        result = gdrive.getFileID(TARGETFILE)
+        #result = gdrive.getFileID(TARGETFILE, TARGETFOLDER)
+        result = ''
 
         if result == '':
             print('No file found.  Uploading new.')
