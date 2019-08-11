@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="92b911b3-6eba-4af6-8f44-787de78dbef1" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/Replace_Updated_Hashes.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GDriveAPI.py" beforeDir="false" afterPath="$PROJECT_DIR$/GDriveAPI.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GPGMail.py" beforeDir="false" afterPath="$PROJECT_DIR$/GPGMail.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CrackedUploaderforGDrive.py" beforeDir="false" afterPath="$PROJECT_DIR$/CrackedUploaderforGDrive.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -59,7 +59,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.GPGMail">
+  <component name="RunManager" selected="Python.CrackedUploaderforGDrive">
     <configuration name="CrackedUploaderforGDrive" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Python" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -174,8 +174,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.GPGMail" />
         <item itemvalue="Python.CrackedUploaderforGDrive" />
+        <item itemvalue="Python.GPGMail" />
         <item itemvalue="Python.LoopingGPG" />
         <item itemvalue="Python.DecryptResponse" />
         <item itemvalue="Python.GDrive" />

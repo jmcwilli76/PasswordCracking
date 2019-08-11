@@ -93,35 +93,39 @@ def startProcess(ConfigFile):
     # Check for source file.
     print('Checking if the source file exists.')
     print('File:  ' + str(os.path.join(SOURCEFOLDER, SOURCEFILE)))
+    fullfilename = os.path.join(SOURCEFOLDER, SOURCEFILE)
 
-    if os.path.isfile(os.path.join(SOURCEFOLDER, SOURCEFILE)):
-        # Remove system argument
-        if len(sys.argv) > 1:
-            sys.argv.pop(1)
+    if os.path.isfile(fullfilename):
+        if os.path.getsize(fullfilename) > 0:
+            # Remove system argument
+            if len(sys.argv) > 1:
+                sys.argv.pop(1)
 
-        # Create GDrive object
-        print('Building GDrive object.')
-        gdrive = GDriveAPI.GDrive(APPName=APIAPPNAME, APPScope=APISCOPES, APIToken=APITOKEN, APICred=APICRED)
+            # Create GDrive object
+            print('Building GDrive object.')
+            gdrive = GDriveAPI.GDrive(APPName=APIAPPNAME, APPScope=APISCOPES, APIToken=APITOKEN, APICred=APICRED)
 
-        print('Checking if file already exists.')
-        # Check to see if the file already exists.
-        result = gdrive.getFileID(TARGETFOLDER, TARGETFILE)
+            print('Checking if file already exists.')
+            # Check to see if the file already exists.
+            result = gdrive.getFileID(TARGETFOLDER, TARGETFILE)
 
-        if result == '':
-            print('No file found.  Uploading new.')
-            result = gdrive.uploadFile(os.path.join(SOURCEFOLDER, SOURCEFILE), TARGETFOLDER, TARGETFILE, MIMETYPE)
+            if result == '':
+                print('No file found.  Uploading new.')
+                result = gdrive.uploadFile(os.path.join(SOURCEFOLDER, SOURCEFILE), TARGETFOLDER, TARGETFILE, MIMETYPE)
 
-        elif result != '0000':
-            print('File found.  Updating.')
-            print('File ID:  ' + result)
-            result = gdrive.updateFile(os.path.join(SOURCEFOLDER, SOURCEFILE), TARGETFOLDER, TARGETFILE, MIMETYPE)
+            elif result != '0000':
+                print('File found.  Updating.')
+                print('File ID:  ' + result)
+                result = gdrive.updateFile(os.path.join(SOURCEFOLDER, SOURCEFILE), TARGETFOLDER, TARGETFILE, MIMETYPE)
+
+            else:
+                print('Too many files found!')
+
+            print('Upload Result:  Type ({0})'.format(str(type(result))))
+            print(result)
 
         else:
-            print('Too many files found!')
-
-        print('Upload Result:  Type ({0})'.format(str(type(result))))
-        print(result)
-
+            print('File found but size is 0.')
 
     else:
         print('No source file found!  ' + str(os.path.join(SOURCEFOLDER, SOURCEFILE)))
