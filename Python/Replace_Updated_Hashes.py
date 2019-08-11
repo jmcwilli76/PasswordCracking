@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 import os
-import sys
+import shutil
 
 # Global Variables
 NEWFILENAME = '/home/jesse/2019_CMIYC/Street Hashes/01_2019-CMIYC-Street-Hashes.txt'
@@ -70,13 +70,32 @@ def processupdatefiles(UpdateFiles, OldFileName, NewFileName):
                 else:
                     print('Update file too small.')
 
+                movefile(file.replace(os.path.basename(file), '')[:-1], OLDUPDATEFOLDER, os.path.basename(file))
+
             if len(hashes) > 0:
+                lines = []
                 for hash in hashes:
                     line = hash + ':' + hashes[hash]
+                    lines.append(line)
+
+                print('Line Count:  ' + str(len(lines)))
+                #print(lines)
+
+                for line in sorted(lines):
                     nfn.write(line)
 
             else:
                 print('Combined hashes empty.')
+
+    return
+
+
+def movefile(CurrentLocation, NewLocation, Filename):
+    print('Moving file :  ' + Filename)
+    print('Old Location:  ' + CurrentLocation)
+    print('New Location:  ' + NewLocation)
+    shutil.move(os.path.join(CurrentLocation, Filename), os.path.join(NewLocation, Filename))
+    print('Move completed.')
 
     return
 
